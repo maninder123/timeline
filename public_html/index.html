@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Viz : Home</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/style1.css" rel="stylesheet" type="text/css"/>
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="src/d3-timeline.js" type="text/javascript"></script>
+        <!--<link href="css/style.css" rel="stylesheet" type="text/css"/>-->
+        <script src="js/timeline.js" type="text/javascript"></script>
+    </head>
+    <body>
+
+        <!--  Chart Main Wrapper Starts  -->
+        <section class="chart-main-wrapper">
+
+            <!--  Chart Head Wrapper Starts  -->
+            <div class="chart-head-wrapper">
+                <div class="left-content">
+                    Clockwise
+                </div>
+                <div class="middle-content">
+                    <img src="images/arrow-left.PNG" alt=""/>
+                    <span>
+                        Mon Feb 2nd - Sun, Feb 9th 2015
+                    </span>
+                    <img src="images/arrow-right.PNG" alt=""/>
+                </div>
+                <div class="right-content">
+                    User43
+                </div>
+            </div>
+            <!--  Chart Head Wrapper Ends  -->
+
+            <!--  Chart Contents Wrapper Starts  -->
+            <div class="chart-contents-wrapper">
+                <div class="chart-contents-item">  
+                    <div class="chart-contents-item-left">
+                        <a href="javascript:void(0);" class="caret-right"></a>
+                        <span> Monday Feb 2nd</span> 
+                    </div>
+                    <div class="chart-wrapper" id="timeline">
+                        
+                    </div>
+                </div>
+                <div class="chart-contents-item">
+                    <div class="chart-contents-item-left">
+                        <a href="javascript:void(0);" class="caret-right"></a>
+                        <span> Tuesday Feb 3rd</span>      
+                    </div>
+                    <div class="chart-wrapper">
+                        <img src="assets/images/chart.PNG" alt="chart" />
+                    </div>
+                </div>
+                <div class="chart-contents-item">
+                    <div class="chart-contents-item-left">
+                        <a href="javascript:void(0);" class="caret-right"></a>
+                        <span> Wed Feb 4th</span>
+                    </div>
+                    <div class="chart-wrapper">
+                        <img src="assets/images/chart.PNG" alt="chart" />
+                    </div>
+                </div>
+                <div class="chart-contents-item">
+                    <div class="chart-contents-item-left">
+                        <a href="javascript:void(0);" class="caret-right"></a>
+                        <span> Thurs Feb 5th</span>
+                    </div>
+                    <div class="chart-wrapper">
+                        <img src="assets/images/chart.PNG" alt="chart" />
+                    </div>
+                </div>
+                <div class="chart-contents-item">
+                    <div class="chart-contents-item-left">
+                        <a href="javascript:void(0);" class="caret-right"></a>
+                        <span>Fri Feb 6th</span>
+                    </div>
+                    <div class="chart-wrapper">
+                        <img src="assets/images/chart.PNG" alt="chart" />
+                    </div>
+                </div>
+                <div class="chart-contents-item">
+                    <div class="chart-contents-item-left">
+                        <a href="javascript:void(0);" class="caret-right"></a>
+                        <span> Sat Feb 7th</span>
+                    </div>
+                    <div class="chart-wrapper">
+                        <img src="assets/images/chart.PNG" alt="chart" />
+                    </div>
+                </div>
+                <div class="chart-contents-item">
+                    <div class="chart-contents-item-left">
+                        <a href="javascript:void(0);" class="caret-right"></a>
+                        <span> Sun Feb 8th</span>
+                    </div>
+                    <div class="chart-wrapper">
+                        <img src="assets/images/chart.PNG" alt="chart" />
+                    </div>
+                </div>
+            </div>
+            <!--  Chart Contents Wrapper Ends  -->
+
+            <!--  Notes Wrapper Starts  -->
+            <div class="notes-wrapper">
+                <h3>
+                    Notes  
+                </h3>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin neque arcu, venenatis et tincidunt tempus, consectetur imperdiet justo. Nulla dignissim venenatis cursus. Ut commodo massa in tellus vestibulum
+                    mollis tincidunt eu sapien. Nam eget sem sed lorem sodales pellentesque sed eget velit. Donec nunc lacus, ultrices et consectetur quis, laoreet et quam. Curabitur nec tellus vitae erat molestie ultricies. Aenean
+                    accumsan interdum nisi sed elementum. Suspendisse adipiscing nisi et leo ullamcorper adipiscing. Vestibulum tristique libero ac lacus eleifend rhoncus. Pellentesque nec elit ac felis dapibus convallis ornare
+                    egestas orci. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris sit amet ante mi. Quisque dui nisl, convallis non rhoncus id, imperdiet eu lorem. Cras ac lacus
+                    nulla, ac elementum massa.
+                </p>
+                <span>
+                    Each note is attached to a 7 day period. In this case Monday feb 2nd - Sunday feb 9th 2015.
+                </span>
+                <p>
+                    This note is automatically stored in a local DB and is attached to this user_id and the week.
+                </p>
+            </div>
+            <!--  Notes Wrapper Ends  -->
+
+        </section>
+        <!--  Chart Main Wrapper Ends  -->
+
+        <!--  The Main Application Script  -->
+        <script>
+            $(document).ready(function() {
+                $(".chart-contents-item-left").click(function() {
+                    $(this).children("a").toggleClass("caret-down");
+                    $(this).next(".chart-wrapper").toggleClass("chart-collapsed");
+                });
+            });
+        </script>
+    </body>
+</html>

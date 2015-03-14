@@ -1,0 +1,155 @@
+html,
+body{
+    margin: 0;
+    padding: 0;
+}
+*{
+    box-sizing: border-box;
+}
+
+/*--  Chart Head Wrapper Styles  --*/
+.chart-head-wrapper{
+    width: 100%;
+    border-bottom: 3px solid #357DB0;
+}
+.chart-head-wrapper .left-content{
+    width: 20%;
+    text-align: center;
+    font-size: 25px;
+    display: inline-block;
+    padding: 10px;
+}
+.chart-head-wrapper .middle-content{
+    width: 55%;
+    text-align: center;
+    display: inline-block;
+    padding: 10px;
+}
+.chart-head-wrapper .middle-content img{
+    display: inline-block;
+}
+.chart-head-wrapper .middle-content span{
+    display: inline-block;
+    font-size: 18px;
+    margin: 4px 0 0;
+    vertical-align: top;
+}
+.chart-head-wrapper .right-content{
+    width: 20%;
+    text-align: center;
+    font-size: 25px;
+    padding: 10px;
+    display: inline-block;
+}
+
+/*--  Chart Contents Wrapper Styles  --*/
+.chart-contents-wrapper{
+    padding: 50px 20px;
+    border-bottom: 3px solid #ccc;
+}
+.chart-contents-item .chart-contents-item-left{
+    width:250px;
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+}
+.chart-contents-item .chart-wrapper{
+    width:65%;
+    display: inline-block;
+    height: 150px;
+    overflow: hidden;
+    -webkit-transition: all .5s ease-in-out; 
+    -moz-transition: all .5s ease-in-out; 
+    -o-transition: all .5s ease-in-out; 
+    transition: all .5s ease-in-out;
+}
+.chart-contents-item .chart-collapsed{
+    width:65%;
+    display: inline-block;  
+    height: 150px;
+    -webkit-transition: all .5s ease-in-out; 
+    -moz-transition: all .5s ease-in-out; 
+    -o-transition: all .5s ease-in-out; 
+    transition: all .5s ease-in-out; 
+}
+
+.chart-contents-item .caret-right{
+    background: url("../images/icon-arrow-right.png") no-repeat scroll center center  rgba(0, 0, 0, 0);  
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    height: 16px;
+    position: relative;
+    width: 16px;
+    display: inline-block;
+}
+.chart-contents-item .caret-down{
+    background: url("../images/icon-arrow-down.png") no-repeat scroll center center  rgba(0, 0, 0, 0);  
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    height: 16px;
+    position: relative;
+    width: 16px;
+    display: inline-block;
+}
+.chart-contents-item span{
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 0 0;
+    vertical-align: top; 
+}
+
+/*--  Notes Wrapper Styles  --*/
+.notes-wrapper{
+    border: 1px solid #ccc;
+    margin: 5px auto;
+    padding: 10px;
+    width: 80%;  
+}
+.notes-wrapper h3{
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+.notes-wrapper p{
+    margin: 0 0 35px;
+    font-size: 14px;
+}
+.notes-wrapper span{
+    display: inline-block;
+    margin: 0 0 15px;
+    font-size: 14px;
+}
+/* CHART RELATED CSS */
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+
+    .axis text {
+      font-family: sans-serif;
+      font-size: 10px;
+    }
+
+    .timeline-label {
+      font-family: sans-serif;
+      font-size: 12px;
+    }
+
+    #timeline2 .axis {
+      transform: translate(0px,30px);
+      -ms-transform: translate(0px,30px); /* IE 9 */
+      -webkit-transform: translate(0px,30px); /* Safari and Chrome */
+      -o-transform: translate(0px,30px); /* Opera */
+      -moz-transform: translate(0px,30px); /* Firefox */
+    }
+
+    .coloredDiv {
+      height:20px; width:20px; float:left;
+    }
+    #timelineItem_location{
+        display: none;
+    }

@@ -1,11 +1,15 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * This java script file reads the data from csv file and plot the timelines.
+ * 
+ * @version             0.0.1
+ * @since 		v0.0.1
+ * @access 		public
+ * @author 		Maninder Singh		<manindersingh221@gmail.com> 
  */
 callLogTimes = [];
 locationTimes = [];
 window.onload = function() {
+    // reading the data from csv file
     d3.csv("data/CallLogProbe.csv", function(error1, callLogData) {
         d3.csv("data/LocationProbe.csv", function(error2, locationData) {
             d3.csv("data/ScreenProbe.csv", function(error2, screenData) {
@@ -18,7 +22,6 @@ window.onload = function() {
                 var endDate = new Date('2013-07-20 00:00:00'.split(' ').join('T')).getTime();
 
                 $.each(callLogData, function(index, value) {
-                    // console.log(value.timestamp);
                     if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000 && i > 0) {
                         var times = {
                             color: "green",
@@ -49,9 +52,9 @@ window.onload = function() {
 
 
                 var labelColorTestData = [
-                    {id : "callLog", label: "Call Log", times: callLogTimes},
-                    {id : "location",label: "Location", times: locationTimes},
-                  ];
+                    {id: "callLog", label: "Call Log", times: callLogTimes},
+                    {id: "location", label: "Location", times: locationTimes},
+                ];
                 console.log(labelColorTestData);
 
                 var width = 700;
@@ -79,12 +82,46 @@ window.onload = function() {
         });
     });
 
+    /* This function will sort the data on timestamp
+     * 
+     * @version             0.0.1
+     * @since 		v0.0.1
+     * @access 		public
+     * @author 		Maninder Singh		<manindersingh221@gmail.com> 
+     */
     function SortByName(a, b) {
         var a1 = a.timestamp, b1 = b.timestamp;
         if (a1 == b1)
             return 0;
         return a1 > b1 ? 1 : -1;
     }
+    /* This function find the current week
+     * 
+     * @version             0.0.1
+     * @since 		v0.0.1
+     * @access 		public
+     * @author 		Maninder Singh		<manindersingh221@gmail.com> 
+     */
+
+    Date.prototype.getWeek = function(start)
+    {
+        //Calcing the starting point
+        start = start || 0;
+        var today = new Date(this.setHours(0, 0, 0, 0));
+        var day = today.getDay() - start;
+        var date = today.getDate() - day;
+
+        // Grabbing Start/End Dates
+        var StartDate = new Date(today.setDate(date));
+        var EndDate = new Date(today.setDate(date + 6));
+        return [dateFormat(StartDate, "dddd, mmmm dS, yyyy"), dateFormat(EndDate, "dddd, mmmm dS, yyyy")];
+    }
+
+    //append current date
+    var Dates = new Date().getWeek();
+    $(".current-week").append(Dates[0] + ' - ' + Dates[1]);
+    //alert(Dates[0].toLocaleDateString() + ' - ' + Dates[1].toLocaleDateString())
+
 
 }
 

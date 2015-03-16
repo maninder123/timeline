@@ -107,15 +107,11 @@ window.onload = function () {
 //                console.log(startDate);
 
                 var endDate = day2.getTime();
-                console.log(endDate);
-                //dynamic starating date,ending date 
-                var startDate = new Date(newStartDate.split(' ').join('T'));
-                console.log(startDate);
-                var endDate = new Date(newEndDate.split(' ').join('T')).getTime();
-                console.log(endDate);
-                for (j = 0; j < 7; j++) {
-                    $.each(callLogData, function (index, value) {
-                        if (parseInt(value.timestamp) <= endDate / 1000 && value.timestamp >= startDate / 1000 && i > 0) {
+                var startDate = new Date('2013-07-19 00:00:00'.split(' ').join('T')).getTime();
+                var endDate = new Date('2013-07-20 00:00:00'.split(' ').join('T')).getTime();
+                for(j=0; j < 7; j++){
+                $.each(callLogData, function(index, value) {
+                    if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000 && i > 0) {
                             var times = {
                                 color: "green",
                                 label: "",

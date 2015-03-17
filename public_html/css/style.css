@@ -48,7 +48,7 @@ body{
     border-bottom: 3px solid #ccc;
 }
 .chart-contents-item .chart-contents-item-left{
-    width:250px;
+    width:300px;
     display: inline-block;
     vertical-align: top;
     cursor: pointer;
@@ -139,13 +139,13 @@ body{
       font-size: 12px;
     }
 
-    #timeline2 .axis {
+/*    #timeline2 .axis {
       transform: translate(0px,30px);
-      -ms-transform: translate(0px,30px); /* IE 9 */
-      -webkit-transform: translate(0px,30px); /* Safari and Chrome */
-      -o-transform: translate(0px,30px); /* Opera */
-      -moz-transform: translate(0px,30px); /* Firefox */
-    }
+      -ms-transform: translate(0px,30px);  IE 9 
+      -webkit-transform: translate(0px,30px);  Safari and Chrome 
+      -o-transform: translate(0px,30px);  Opera 
+      -moz-transform: translate(0px,30px);  Firefox 
+    }*/
 
     .coloredDiv {
       height:20px; width:20px; float:left;

@@ -1,3 +1,4 @@
+
 /**
  * This java script file reads the data from csv file and plot the timelines.
  * 
@@ -8,7 +9,10 @@
  */
 callLogTimes = [];
 smsTimes = [];
-window.onload = function () {
+callLogData = new Array();
+smsData = new Array();
+var previousTimestamp;
+window.onload = function() {
     /* This function find the current week
      * 
      * @version             0.0.1
@@ -28,7 +32,7 @@ window.onload = function () {
     }
     else {
         startDate = d1.last().monday();
-        console.log(startDate);
+        //console.log(startDate);
         endDate = d2.next().sunday();
     }
     //append current date
@@ -36,17 +40,27 @@ window.onload = function () {
     $(".current-week-start").text(dateFormat(startDate, "dddd, mmmm dS, yyyy"));
     $(".current-week-end").text(dateFormat(endDate, "dddd, mmmm dS, yyyy"));
     //---------------------------------------------------------------------------
-//appending week days
+    //appending week days
     var day_zero = dateFormat(startDate, 'dddd, mmmm dS');
     $('.day0').text(day_zero);
     var i = 1;
     for (i = 1; i < 7; i++) {
         var week_days = startDate.next().day();
-        $('.day' + i).text(dateFormat(week_days, "dddd, mmmm dS"));
+        $('.day' + i).text(dateFormat(week_days, "dddd, mmmm dS,  yyyy"));
 
     }
-//  ------------------------------------------------------------------------------
-    $(".previousArrow").click(function () {
+    //  ------------------------------------------------------------------------------
+    $(".previousArrow").click(function() {
+        $.blockUI({css: {
+                border: 'none',
+                padding: '15px',
+                backgroundColor: '#000',
+                '-webkit-border-radius': '10px',
+                '-moz-border-radius': '10px',
+                opacity: .5,
+                color: '#fff'
+            }});
+
         var currentWeekStart = $(".current-week-start").text();
         var currentWeekEnd = $(".current-week-end").text();
         var s1 = Date.parse(currentWeekStart);
@@ -65,10 +79,15 @@ window.onload = function () {
             var week_days_new = newStartDate.next().day();
             $('.day' + i).text(dateFormat(week_days_new, "dddd, mmmm dS"));
         }
-//   timelineLabelColor();
+
+        drawGraph();
+        $.unblockUI();
+        //   timelineLabelColor();
     });
 
-    $(".nextArrow").click(function () {
+    $(".nextArrow").click(function() {
+
+        $.blockUI();
         var currentWeekStart = $(".current-week-start").text();
         var currentWeekEnd = $(".current-week-end").text();
         var s1 = Date.parse(currentWeekStart);
@@ -85,92 +104,109 @@ window.onload = function () {
             var week_days_new1 = newStartDate.next().day();
             $('.day' + i).text(dateFormat(week_days_new1, "dddd, mmmm dS, yyyy"));
         }
+
+        drawGraph();
+        $.unblockUI();
     });
 
+
+    var drawGraph = function() {
+
+        var call_log_check_count = 0;
+        var sms_check_count = 0;
+
+        for (j = 0; j < 7; j++) {
+
+            $("#timeline" + j).empty();
+            var startDateText = $(".day" + j).text();
+            var startDateObj = Date.parse(startDateText);
+            console.log(startDateText);
+            var startDate = startDateObj.getTime();
+            console.log(startDateText, startDate);
+            var endDate = startDateObj.next().day().getTime();
+
+
+            $.each(callLogData, function(index, value) {
+                //console.log( endDate,value.timestamp,startDate) ;
+                if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000 && call_log_check_count > 0) {
+                    //console.log( endDate) ;
+                    console.log(endDate, value.timestamp, startDate, previousTimestamp);
+                    var times = {
+                        color: "green",
+                        label: "",
+                        starting_time: previousTimestamp * 1000,
+                        ending_time: value.timestamp * 1000
+                    };
+                    callLogTimes.push(times);
+                    //console.log(times);
+                }
+                previousTimestamp = value.timestamp;
+                call_log_check_count++;
+            });
+
+            $.each(smsData, function(index, value) {
+                //console.log(value.timestamp);
+                if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000 && sms_check_count > 0) {
+                    var times = {
+                        color: "pink",
+                        label: "",
+                        starting_time: previousTimestamp * 1000,
+                        ending_time: value.timestamp * 1000
+                    };
+                    smsTimes.push(times);
+                }
+                previousTimestamp = value.timestamp;
+                sms_check_count++;
+            });
+
+
+            var labelColorTestData = [
+                {id: "callLog", label: "Call Log", times: callLogTimes},
+                {id: "sms", label: "SMS", times: smsTimes},
+            ];
+            // console.log(labelColorTestData);
+
+            var width = 700;
+
+            function timelineLabelColor() {
+                var chart = d3.timeline()
+                        .beginning(startDate) // we can optionally add beginning and ending times to speed up rendering a little
+                        .ending(endDate)
+                        .tickFormat({
+                            format: function(d) {
+                                return d3.time.format("%H:%M")(d)
+                            },
+                            tickTime: d3.time.hours,
+                            tickInterval: 3,
+                            tickSize: 15,
+                        })
+                        .stack() // toggles graph stacking
+                        .margin({left: 70, right: 30, top: 0, bottom: 0});
+                var svg = d3.select("#timeline" + j).append("svg").attr("width", width)
+                        .datum(labelColorTestData).call(chart);
+            }
+            timelineLabelColor();
+        }
+    }
+
     // reading the data from csv file
-    d3.csv("data/CallLogProbe.csv", function (error1, callLogData) {
-        d3.csv("data/SMSProbe.csv", function (error2, smsData) {
-            d3.csv("data/ScreenProbe.csv", function (error2, screenData) {
+    d3.csv("data/CallLogProbe.csv", function(error1, callLog) {
+        d3.csv("data/SMSProbe.csv", function(error2, smsLog) {
+            d3.csv("data/ScreenProbe.csv", function(error2, screenData) {
                 // console.log(callLogData, locationData);
-                var i = 0;
-                var previousTimestamp;
-                callLogData.sort(SortByName);
-                smsData.sort(SortByName);
-                console.log(callLogData);
-                console.log(smsData);
+                //var i = 0;
+                // var previousTimestamp;
+                callLogData = callLog.sort(SortByName);
+                smsData = smsLog.sort(SortByName);
+                //onsole.log(callLogData);
+                //console.log(smsData);
                 var day1 = $(".current-week-start").text();
                 var d1 = Date.parse(day1);
                 var newStartDate = dateFormat(d1, "yyyy-mm-dd hh:mm:ss");
                 var day2 = d1.next().day();
                 var newEndDate = dateFormat(d2, "yyyy-mm-dd hh:mm:ss");
-//                alert(newEndDate);
+                drawGraph();
 
-                var startDate = d1.getTime();
-//                console.log(startDate);
-
-                var endDate = day2.getTime();
-                var startDate = new Date('2013-07-19 00:00:00'.split(' ').join('T')).getTime();
-                var endDate = new Date('2013-07-20 00:00:00'.split(' ').join('T')).getTime();
-                for(j=0; j < 7; j++){
-                $.each(callLogData, function(index, value) {
-                    if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000 && i > 0) {
-                            var times = {
-                                color: "green",
-                                label: "",
-                                starting_time: previousTimestamp * 1000,
-                                ending_time: value.timestamp * 1000
-                            };
-                            callLogTimes.push(times);
-                            console.log(times);
-                        }
-                        previousTimestamp = value.timestamp;
-                        i++;
-                    });
-
-                    $.each(smsData, function (index, value) {
-                        //console.log(value.timestamp);
-                        if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000 && i > 0) {
-                            var times = {
-                                color: "pink",
-                                label: "",
-                                starting_time: previousTimestamp * 1000,
-                                ending_time: value.timestamp * 1000
-                            };
-                            smsTimes.push(times);
-                        }
-                        previousTimestamp = value.timestamp;
-                        i++;
-                    });
-
-
-                    var labelColorTestData = [
-                        {id: "callLog", label: "Call Log", times: callLogTimes},
-                        {id: "sms", label: "SMS", times: smsTimes},
-                    ];
-                    console.log(labelColorTestData);
-
-                    var width = 700;
-
-                    function timelineLabelColor() {
-                        var chart = d3.timeline()
-                                .beginning(startDate) // we can optionally add beginning and ending times to speed up rendering a little
-                                .ending(endDate)
-                                .tickFormat({
-                                    format: function (d) {
-                                        return d3.time.format("%H:%M")(d)
-                                    },
-                                    tickTime: d3.time.hours,
-                                    tickInterval: 3,
-                                    tickSize: 15,
-                                })
-                                .stack() // toggles graph stacking
-                                .margin({left: 70, right: 30, top: 0, bottom: 0});
-                        var svg = d3.select("#timeline" + j).append("svg").attr("width", width)
-                                .datum(labelColorTestData).call(chart);
-                    }
-                    timelineLabelColor();
-                }
-                ;
             });
         });
     });

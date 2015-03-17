@@ -7,7 +7,7 @@
  * @author 		Maninder Singh		<manindersingh221@gmail.com> 
  */
 callLogTimes = [];
-locationTimes = [];
+smsTimes = [];
 window.onload = function () {
     /* This function find the current week
      * 
@@ -89,13 +89,15 @@ window.onload = function () {
 
     // reading the data from csv file
     d3.csv("data/CallLogProbe.csv", function (error1, callLogData) {
-        d3.csv("data/LocationProbe.csv", function (error2, locationData) {
+        d3.csv("data/SMSProbe.csv", function (error2, smsData) {
             d3.csv("data/ScreenProbe.csv", function (error2, screenData) {
                 // console.log(callLogData, locationData);
                 var i = 0;
                 var previousTimestamp;
                 callLogData.sort(SortByName);
-                locationData.sort(SortByName);
+                smsData.sort(SortByName);
+                console.log(callLogData);
+                console.log(smsData);
                 var day1 = $(".current-week-start").text();
                 var d1 = Date.parse(day1);
                 var newStartDate = dateFormat(d1, "yyyy-mm-dd hh:mm:ss");
@@ -125,7 +127,7 @@ window.onload = function () {
                         i++;
                     });
 
-                    $.each(locationData, function (index, value) {
+                    $.each(smsData, function (index, value) {
                         //console.log(value.timestamp);
                         if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000 && i > 0) {
                             var times = {
@@ -134,7 +136,7 @@ window.onload = function () {
                                 starting_time: previousTimestamp * 1000,
                                 ending_time: value.timestamp * 1000
                             };
-                            locationTimes.push(times);
+                            smsTimes.push(times);
                         }
                         previousTimestamp = value.timestamp;
                         i++;
@@ -143,7 +145,7 @@ window.onload = function () {
 
                     var labelColorTestData = [
                         {id: "callLog", label: "Call Log", times: callLogTimes},
-                        {id: "location", label: "Location", times: locationTimes},
+                        {id: "sms", label: "SMS", times: smsTimes},
                     ];
                     console.log(labelColorTestData);
 

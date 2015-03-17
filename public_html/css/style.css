@@ -48,7 +48,7 @@ body{
     border-bottom: 3px solid #ccc;
 }
 .chart-contents-item .chart-contents-item-left{
-    width:250px;
+    width:300px;
     display: inline-block;
     vertical-align: top;
     cursor: pointer;

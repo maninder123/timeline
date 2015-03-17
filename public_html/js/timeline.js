@@ -83,7 +83,7 @@ window.onload = function () {
         var i = 1;
         for (i = 1; i < 7; i++) {
             var week_days_new1 = newStartDate.next().day();
-            $('.day' + i).text(dateFormat(week_days_new1, "dddd, mmmm dS"));
+            $('.day' + i).text(dateFormat(week_days_new1, "dddd, mmmm dS, yyyy"));
         }
     });
 

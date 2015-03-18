@@ -11,6 +11,8 @@ callLogTimes = [];
 smsTimes = [];
 callLogData = new Array();
 smsData = new Array();
+screenData = new Array();
+locationData = new Array();
 var previousTimestamp;
 window.onload = function() {
     /* This function find the current week
@@ -114,48 +116,12 @@ window.onload = function() {
 
 
     var drawGraph = function() {
-
-
-
-        for (j = 0; j < 7; j++) {
-            var call_log_check_count = 0;
-            var sms_check_count = 0;
-            var offset = 0;
-            var times={};
-            var callLogTimes= new Array();
-            var smsTimes = new Array();
-            $("#timeline" + j).empty();
-            var startDateText = $(".day" + j).text();
-            var startDateObj = Date.parse(startDateText);
-
-            //var startDate = startDateObj.getTime();
-            // var startDate = (startDateObj.getTime() + Math.abs(startDateObj.getTimezoneOffset())*60*1000);
-            var startDate = (startDateObj.getTime() - (startDateObj.getTimezoneOffset() * 60 * 1000));
-            console.log(startDateObj.getTimezoneOffset() * 60 * 1000);
-            // console.log(startDateText, startDate);
-            //console.log(startDateObj);
-
-            /* if(startDateObj.getTimezoneOffset()*60*1000>0){
-             offset = startDateObj.getTimezoneOffset()*60*1000;
-             }
-             
-             else{
-             offset = Math.abs(startDateObj.getTimezoneOffset())*60*1000;      	
-             }
-             */
-            var endDate = (startDateObj.next().day().getTime() - (startDateObj.getTimezoneOffset() * 60 * 1000));
-            console.log(startDateObj.getTimezoneOffset() * 60 * 1000);
-            console.log("jjj", call_log_check_count, sms_check_count);
-
-            $.each(callLogData, function(index, value) {
-                console.log(endDate, value.timestamp, startDate);
+    	
+    	function callLog(){
+          $.each(callLogData, function(index, value) {
                 if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000) {
 
                     if (call_log_check_count > 0) {
-
-                        //console.log( endDate) ;
-                        console.log(endDate, value.timestamp, startDate, previousTimestamp);
-                        console.log("iii", call_log_check_count, sms_check_count)
                         times = {
                             color: "green",
                             label: "",
@@ -163,7 +129,6 @@ window.onload = function() {
                             ending_time: value.timestamp * 1000
                         };
                         callLogTimes.push(times);
-                        //console.log(times);
                     }
                     previousTimestamp = value.timestamp;
                     call_log_check_count++;
@@ -171,12 +136,12 @@ window.onload = function() {
                 }
 
             });
+         }
 
-            $.each(smsData, function(index, value) {
-                //console.log(value.timestamp);
+       function smsLog(){
+           $.each(smsData, function(index, value) {
                 if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000) {
                     if (sms_check_count > 0) {
-                        console.log("kkk", call_log_check_count, sms_check_count);
                         var times = {
                             color: "pink",
                             label: "",
@@ -190,13 +155,81 @@ window.onload = function() {
                 }
 
             });
+            }
+            
+        function screenLog(){
+        	    $.each(screenData, function(index, value) {
+                console.log(value.timestamp);
+                if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000) {
+                    if (screen_check_count > 0) {
+                        var times = {
+                            color: "#265A38",
+                            label: "",
+                            starting_time: previousTimestamp * 1000,
+                            ending_time: value.timestamp * 1000
+                        };
+                        screenLogTimes.push(times);
+                    }
+                    previousTimestamp = value.timestamp;
+                    screen_check_count++;
+                }
 
+            });
+        	}
+
+        function locationLog(){
+        	    
+        	    $.each(locationData, function(index, value) {
+                //console.log(value.timestamp);
+                if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000) {
+                    if (location_check_count > 0) {
+                        console.log("lll", call_log_check_count, sms_check_count,screen_check_count, location_check_count);
+                        var times = {
+                            color: "#2C332E",
+                            label: "",
+                            starting_time: previousTimestamp * 1000,
+                            ending_time: value.timestamp * 1000
+                        };
+                        locationLogTimes.push(times);
+                    }
+                    previousTimestamp = value.timestamp;
+                    location_check_count++;
+                }
+
+            });
+        	}
+        	
+        for (j = 0; j < 7; j++) {
+        	
+            var call_log_check_count = 0;
+            var sms_check_count = 0;
+            var screen_check_count = 0;
+            var location_check_count = 0;
+            var offset = 0;
+            var times={};
+            var callLogTimes= new Array();
+            var smsTimes = new Array();
+            var screenLogTimes = new Array();
+            var locationLogTimes = new Array();
+            
+            $("#timeline" + j).empty();
+            var startDateText = $(".day" + j).text();
+            var startDateObj = Date.parse(startDateText);
+            var startDate = (startDateObj.getTime() - (startDateObj.getTimezoneOffset() * 60 * 1000));
+            var endDate = (startDateObj.next().day().getTime() - (startDateObj.getTimezoneOffset() * 60 * 1000));
+            
+            callLog();
+            smsLog();
+            screenLog();
+            locationLog();
 
             var labelColorTestData = [
                 {id: "callLog", label: "Call Log", times: callLogTimes},
                 {id: "sms", label: "SMS", times: smsTimes},
+                {id: "screenLog", label: "Screen", times: screenLogTimes},
+                {id: "locationLog", label: "Location", times: locationLogTimes},
             ];
-            // console.log(labelColorTestData);
+
 
             var width = 700;
 
@@ -225,13 +258,12 @@ window.onload = function() {
     d3.csv("data/CallLogProbe.csv", function(error1, callLog) {
         d3.csv("data/SMSProbe.csv", function(error2, smsLog) {
             d3.csv("data/ScreenProbe.csv", function(error2, screenLog) {
-                // console.log(callLogData, locationData);
-                //var i = 0;
-                // var previousTimestamp;
+            	 d3.csv("data/LocationProbe.csv", function(error2, locationLog) {
                 callLogData = callLog.sort(SortByName);
                 smsData = smsLog.sort(SortByName);
-                //console.log(callLogData);
-                //console.log(smsData);
+                screenData = screenLog.sort(SortByName);
+                locationData = locationLog.sort(SortByName);
+          
                 var day1 = $(".current-week-start").text();
                 var d1 = Date.parse(day1);
                 var newStartDate = dateFormat(d1, "yyyy-mm-dd hh:mm:ss");
@@ -242,6 +274,7 @@ window.onload = function() {
             });
         });
     });
+ });
 
     /* This function will sort the data on timestamp
      * 

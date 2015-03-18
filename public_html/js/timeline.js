@@ -51,7 +51,7 @@ window.onload = function() {
     }
     //  ------------------------------------------------------------------------------
     $(".previousArrow").click(function() {
-    	
+
         $.blockUI({css: {
                 border: 'none',
                 padding: '15px',
@@ -108,86 +108,87 @@ window.onload = function() {
 
         drawGraph();
         $.unblockUI();
-        
-        
+
+
     });
 
 
     var drawGraph = function() {
 
-        
+
 
         for (j = 0; j < 7; j++) {
-
             var call_log_check_count = 0;
             var sms_check_count = 0;
             var offset = 0;
+            var times={};
+            var callLogTimes= new Array();
+            var smsTimes = new Array();
             $("#timeline" + j).empty();
             var startDateText = $(".day" + j).text();
             var startDateObj = Date.parse(startDateText);
-           
+
             //var startDate = startDateObj.getTime();
-           // var startDate = (startDateObj.getTime() + Math.abs(startDateObj.getTimezoneOffset())*60*1000);
-            var startDate = (startDateObj.getTime() - (startDateObj.getTimezoneOffset()*60*1000));
-            console.log(startDateObj.getTimezoneOffset()*60*1000);
-           // console.log(startDateText, startDate);
+            // var startDate = (startDateObj.getTime() + Math.abs(startDateObj.getTimezoneOffset())*60*1000);
+            var startDate = (startDateObj.getTime() - (startDateObj.getTimezoneOffset() * 60 * 1000));
+            console.log(startDateObj.getTimezoneOffset() * 60 * 1000);
+            // console.log(startDateText, startDate);
             //console.log(startDateObj);
-            
-           /* if(startDateObj.getTimezoneOffset()*60*1000>0){
-            	 offset = startDateObj.getTimezoneOffset()*60*1000;
-            }
-            
-            else{
-                offset = Math.abs(startDateObj.getTimezoneOffset())*60*1000;      	
-            	}
-           */
-            var endDate = (startDateObj.next().day().getTime() - (startDateObj.getTimezoneOffset()*60*1000));
-            console.log(startDateObj.getTimezoneOffset()*60*1000);
-            console.log("jjj",call_log_check_count, sms_check_count);
+
+            /* if(startDateObj.getTimezoneOffset()*60*1000>0){
+             offset = startDateObj.getTimezoneOffset()*60*1000;
+             }
+             
+             else{
+             offset = Math.abs(startDateObj.getTimezoneOffset())*60*1000;      	
+             }
+             */
+            var endDate = (startDateObj.next().day().getTime() - (startDateObj.getTimezoneOffset() * 60 * 1000));
+            console.log(startDateObj.getTimezoneOffset() * 60 * 1000);
+            console.log("jjj", call_log_check_count, sms_check_count);
 
             $.each(callLogData, function(index, value) {
-                console.log( endDate,value.timestamp,startDate) ;
-                if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000 ) {
- 
-                	if(call_log_check_count > 0){
-                	
-                    //console.log( endDate) ;
-                    console.log(endDate, value.timestamp, startDate, previousTimestamp);
-                    console.log("iii",call_log_check_count, sms_check_count)
-                    var times = {
-                        color: "green",
-                        label: "",
-                        starting_time: previousTimestamp * 1000,
-                        ending_time: value.timestamp * 1000
-                    };
-                    callLogTimes.push(times);
-                    //console.log(times);
-                }
+                console.log(endDate, value.timestamp, startDate);
+                if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000) {
+
+                    if (call_log_check_count > 0) {
+
+                        //console.log( endDate) ;
+                        console.log(endDate, value.timestamp, startDate, previousTimestamp);
+                        console.log("iii", call_log_check_count, sms_check_count)
+                        times = {
+                            color: "green",
+                            label: "",
+                            starting_time: previousTimestamp * 1000,
+                            ending_time: value.timestamp * 1000
+                        };
+                        callLogTimes.push(times);
+                        //console.log(times);
+                    }
                     previousTimestamp = value.timestamp;
                     call_log_check_count++;
-                  
 
-             } 
-              
+                }
+
             });
 
             $.each(smsData, function(index, value) {
                 //console.log(value.timestamp);
                 if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000) {
-                	  if(sms_check_count > 0){
-                	  	console.log("kkk",call_log_check_count, sms_check_count);
-                    var times = {
-                        color: "pink",
-                        label: "",
-                        starting_time: previousTimestamp * 1000,
-                        ending_time: value.timestamp * 1000
-                    };
-                    smsTimes.push(times);
+                    if (sms_check_count > 0) {
+                        console.log("kkk", call_log_check_count, sms_check_count);
+                        var times = {
+                            color: "pink",
+                            label: "",
+                            starting_time: previousTimestamp * 1000,
+                            ending_time: value.timestamp * 1000
+                        };
+                        smsTimes.push(times);
+                    }
+                    previousTimestamp = value.timestamp;
+                    sms_check_count++;
                 }
-                 previousTimestamp = value.timestamp;
-                 sms_check_count++;
-             }
-               
+
             });
 
 

@@ -51,6 +51,7 @@ window.onload = function() {
     }
     //  ------------------------------------------------------------------------------
     $(".previousArrow").click(function() {
+    	
         $.blockUI({css: {
                 border: 'none',
                 padding: '15px',
@@ -82,7 +83,7 @@ window.onload = function() {
 
         drawGraph();
         $.unblockUI();
-        //   timelineLabelColor();
+        //timelineLabelColor();
     });
 
     $(".nextArrow").click(function() {
@@ -107,30 +108,52 @@ window.onload = function() {
 
         drawGraph();
         $.unblockUI();
+        
+        
     });
 
 
     var drawGraph = function() {
 
-        var call_log_check_count = 0;
-        var sms_check_count = 0;
+        
 
         for (j = 0; j < 7; j++) {
 
+            var call_log_check_count = 0;
+            var sms_check_count = 0;
+            var offset = 0;
             $("#timeline" + j).empty();
             var startDateText = $(".day" + j).text();
             var startDateObj = Date.parse(startDateText);
-            console.log(startDateText);
-            var startDate = startDateObj.getTime();
-            console.log(startDateText, startDate);
-            var endDate = startDateObj.next().day().getTime();
-
+           
+            //var startDate = startDateObj.getTime();
+           // var startDate = (startDateObj.getTime() + Math.abs(startDateObj.getTimezoneOffset())*60*1000);
+            var startDate = (startDateObj.getTime() - (startDateObj.getTimezoneOffset()*60*1000));
+            console.log(startDateObj.getTimezoneOffset()*60*1000);
+           // console.log(startDateText, startDate);
+            //console.log(startDateObj);
+            
+           /* if(startDateObj.getTimezoneOffset()*60*1000>0){
+            	 offset = startDateObj.getTimezoneOffset()*60*1000;
+            }
+            
+            else{
+                offset = Math.abs(startDateObj.getTimezoneOffset())*60*1000;      	
+            	}
+           */
+            var endDate = (startDateObj.next().day().getTime() - (startDateObj.getTimezoneOffset()*60*1000));
+            console.log(startDateObj.getTimezoneOffset()*60*1000);
+            console.log("jjj",call_log_check_count, sms_check_count);
 
             $.each(callLogData, function(index, value) {
-                //console.log( endDate,value.timestamp,startDate) ;
-                if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000 && call_log_check_count > 0) {
+                console.log( endDate,value.timestamp,startDate) ;
+                if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000 ) {
+ 
+                	if(call_log_check_count > 0){
+                	
                     //console.log( endDate) ;
                     console.log(endDate, value.timestamp, startDate, previousTimestamp);
+                    console.log("iii",call_log_check_count, sms_check_count)
                     var times = {
                         color: "green",
                         label: "",
@@ -140,13 +163,19 @@ window.onload = function() {
                     callLogTimes.push(times);
                     //console.log(times);
                 }
-                previousTimestamp = value.timestamp;
-                call_log_check_count++;
+                    previousTimestamp = value.timestamp;
+                    call_log_check_count++;
+                  
+
+             } 
+              
             });
 
             $.each(smsData, function(index, value) {
                 //console.log(value.timestamp);
-                if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000 && sms_check_count > 0) {
+                if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000) {
+                	  if(sms_check_count > 0){
+                	  	console.log("kkk",call_log_check_count, sms_check_count);
                     var times = {
                         color: "pink",
                         label: "",
@@ -155,8 +184,10 @@ window.onload = function() {
                     };
                     smsTimes.push(times);
                 }
-                previousTimestamp = value.timestamp;
-                sms_check_count++;
+                 previousTimestamp = value.timestamp;
+                 sms_check_count++;
+             }
+               
             });
 
 
@@ -198,7 +229,7 @@ window.onload = function() {
                 // var previousTimestamp;
                 callLogData = callLog.sort(SortByName);
                 smsData = smsLog.sort(SortByName);
-                //onsole.log(callLogData);
+                //console.log(callLogData);
                 //console.log(smsData);
                 var day1 = $(".current-week-start").text();
                 var d1 = Date.parse(day1);

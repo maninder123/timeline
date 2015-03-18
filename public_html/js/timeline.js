@@ -223,7 +223,7 @@ window.onload = function() {
     // reading the data from csv file
     d3.csv("data/CallLogProbe.csv", function(error1, callLog) {
         d3.csv("data/SMSProbe.csv", function(error2, smsLog) {
-            d3.csv("data/ScreenProbe.csv", function(error2, screenData) {
+            d3.csv("data/ScreenProbe.csv", function(error2, screenLog) {
                 // console.log(callLogData, locationData);
                 //var i = 0;
                 // var previousTimestamp;

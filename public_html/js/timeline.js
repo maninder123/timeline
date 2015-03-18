@@ -222,13 +222,24 @@ window.onload = function() {
             smsLog();
             screenLog();
             locationLog();
-
+            
+             if(call_log_check_count<=1 && sms_check_count<=1 && screen_check_count<=1 && location_check_count<=1){
+                 var labelColorTestData = [
+                {id: "callLog", label: "No Data", times: callLogTimes},
+                {id: "sms", label: "No Data", times: smsTimes},
+                {id: "screenLog", label: "No Data", times: screenLogTimes},
+                {id: "locationLog", label: "No Data", times: locationLogTimes},
+            ];
+             }
+             
+            else{
             var labelColorTestData = [
                 {id: "callLog", label: "Call Log", times: callLogTimes},
                 {id: "sms", label: "SMS", times: smsTimes},
                 {id: "screenLog", label: "Screen", times: screenLogTimes},
                 {id: "locationLog", label: "Location", times: locationLogTimes},
             ];
+           }
 
 
             var width = 700;

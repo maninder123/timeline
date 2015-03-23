@@ -138,7 +138,11 @@ body{
       font-family: sans-serif;
       font-size: 12px;
     }
-
+    
+     .date-pick{
+       position:absolute; 
+       z-index:10;    	
+    	}
 /*    #timeline2 .axis {
       transform: translate(0px,30px);
       -ms-transform: translate(0px,30px);  IE 9 

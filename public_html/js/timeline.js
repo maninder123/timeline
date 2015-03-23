@@ -13,7 +13,7 @@ callLogData = new Array();
 smsData = new Array();
 screenData = new Array();
 locationData = new Array();
-var previousTimestamp;	
+var previousTimestamp;
 window.onload = function() {
     /* This function find the current week
      * 
@@ -50,7 +50,10 @@ window.onload = function() {
         $('.day' + i).text(dateFormat(week_days, "dddd, mmmm dS,  yyyy"));
 
     }
-    //  ------------------------------------------------------------------------------
+    /*
+     * Left arrow click event, click ing on this arrow will take us a week back
+     * 
+     */
     $(".previousArrow").click(function() {
 
         $.blockUI({css: {
@@ -82,9 +85,14 @@ window.onload = function() {
             $('.day' + i).text(dateFormat(week_days_new, "dddd, mmmm dS"));
         }
 
-        drawGraph();
+        drawGraph(); // calling draw fucntion to plot
         $.unblockUI();
     });
+
+    /*
+     * Right arrow click event, clicking on this arrow will take us to next week
+     * 
+     */
 
     $(".nextArrow").click(function() {
 
@@ -106,79 +114,87 @@ window.onload = function() {
             $('.day' + i).text(dateFormat(week_days_new1, "dddd, mmmm dS, yyyy"));
         }
 
-        drawGraph();
+        drawGraph(); // calling draw fucntion to plot
         $.unblockUI();
 
 
     });
-
+    /*
+     * this function wil handle all the csv data and plot the chart
+     */
 
     var drawGraph = function() {
+        /*
+         * Handling call log data
+         */
+        function callLog() {
+            $.each(callLogData, function(index, value) {
 
-    	function callLog(){
-          $.each(callLogData, function(index, value) {
-          	    
                 if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000) {
-                    
-                 	  if(value.CALLS_type==1){
-                	  	  var color_graph = "green";
-                	  	}
-                	  	if(value.CALLS_type == 2){
-                        var color_graph = "red"; 
-                	  	}
-                	  		if(value.CALLS_type == 3){
-                        var color_graph = "blue"; 
-                	  	}
-                        times = {
-                            color: ""+color_graph,
-                            label: "",
-                            starting_time: value.timestamp * 1000,
-                            ending_time: value.timestamp * 1000 + value.CALLS_duration*1000
-                        };
-                        callLogTimes.push(times);
-                        call_log_check_count++;
+
+                    if (value.CALLS_type == 1) {
+                        var color_graph = "green";
+                    }
+                    if (value.CALLS_type == 2) {
+                        var color_graph = "red";
+                    }
+                    if (value.CALLS_type == 3) {
+                        var color_graph = "blue";
+                    }
+                    times = {
+                        color: "" + color_graph,
+                        label: "",
+                        starting_time: value.timestamp * 1000,
+                        ending_time: value.timestamp * 1000 + value.CALLS_duration * 1000
+                    };
+                    callLogTimes.push(times);
+                    call_log_check_count++;
 
                 }
 
             });
-         }
-
-       function smsLog(){
-           $.each(smsData, function(index, value) {
+        }
+        /*
+         * Handling sms log data
+         */
+        function smsLog() {
+            $.each(smsData, function(index, value) {
                 if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000) {
-                	
-                	   if(value.MESSAGES_type==1){
-                	  	  var color_graph = "blue";
-                	  	}
-                	  	if(value.MESSAGES_type == 2){
-                        var color_graph = "yellow"; 
-                	  	}
-                        var times = {
-                            color: ""+color_graph,
-                            label: "",
-                            starting_time: value.timestamp * 1000,
-                            ending_time: value.timestamp * 1000 + 1000
-                        };
-                        smsTimes.push(times);
-                        sms_check_count++;
+
+                    if (value.MESSAGES_type == 1) {
+                        var color_graph = "blue";
+                    }
+                    if (value.MESSAGES_type == 2) {
+                        var color_graph = "yellow";
+                    }
+                    var times = {
+                        color: "" + color_graph,
+                        label: "",
+                        starting_time: value.timestamp * 1000,
+                        ending_time: value.timestamp * 1000 + 1000
+                    };
+                    smsTimes.push(times);
+                    sms_check_count++;
                 }
 
             });
-            }
-            
-        function screenLog(){
-        	    $.each(screenData, function(index, value) {
+        }
+        /*
+         * Handling screen log data
+         */
+        function screenLog() {
+            $.each(screenData, function(index, value) {
                 if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000) {
                     if (screen_check_count > 0) {
-                    	  
-                	   if(value.screenOn == "False"){
-                	  	  var color_graph = "blue";
-                	  	}
-                	  	if(value.screenOn == "True"){
-                        var color_graph = "yellow"; 
-                	  	}
+
+                        if (value.screenOn == "False") {
+                            var color_graph = "blue";
+                        }
+                        if (value.screenOn == "True") {
+                            var color_graph = "yellow";
+                        }
                         var times = {
-                            color: ""+color_graph,
+                            color: "" + color_graph,
                             label: "",
                             starting_time: previousTimestamp * 1000,
                             ending_time: value.timestamp * 1000
@@ -190,56 +206,61 @@ window.onload = function() {
                 }
 
             });
-        	}
+        }
+        /*
+         * Handling location log data
+         */
+        function locationLog() {
 
-        function locationLog(){
-    
-        	    $.each(locationData, function(index, value) {
+            $.each(locationData, function(index, value) {
                 if (value.timestamp <= endDate / 1000 && value.timestamp >= startDate / 1000) {
-                        var times = {
-                            color : value.location_color,
-                            label: "",
-                            starting_time: value.timestamp * 1000 ,
-                            ending_time: value.timestamp * 1000 + value.duration
-                        };
-                        locationLogTimes.push(times);
-                        location_check_count++;
+                    var times = {
+                        color: value.location_color,
+                        label: "",
+                        starting_time: value.timestamp * 1000,
+                        ending_time: value.timestamp * 1000 + value.duration
+                    };
+                    locationLogTimes.push(times);
+                    location_check_count++;
                 }
 
             });
-        	}
-        	
+        }
+
+        /*
+         * Looping throught the data and plotting for all 7 days of the week
+         */
         for (j = 0; j < 7; j++) {
-        	
+
             var call_log_check_count = 0;
             var sms_check_count = 0;
             var screen_check_count = 0;
             var location_check_count = 0;
             var offset = 0;
-            var times={};
-            var callLogTimes= new Array();
+            var times = {};
+            var callLogTimes = new Array();
             var smsTimes = new Array();
             var screenLogTimes = new Array();
             var locationLogTimes = new Array();
-            
+
             $("#timeline" + j).empty();
             var startDateText = $(".day" + j).text();
             var startDateObj = Date.parse(startDateText);
-            
+
             var startDate = startDateObj.getTime();
             var endDate = startDateObj.next().day().getTime();
             callLog();
             smsLog();
             screenLog();
             locationLog();
-            
-            var labelColorTestData = [
+
+            var finalData = [
                 {id: "screenLog", label: "Screen", times: screenLogTimes},
                 {id: "locationLog", label: "Location", times: locationLogTimes},
                 {id: "callLog", label: "Call Log", times: callLogTimes},
                 {id: "sms", label: "SMS", times: smsTimes},
             ];
-         
+
 
 
             var width = 700;
@@ -259,7 +280,7 @@ window.onload = function() {
                         .stack() // toggles graph stacking
                         .margin({left: 70, right: 30, top: 0, bottom: 0});
                 var svg = d3.select("#timeline" + j).append("svg").attr("width", width)
-                        .datum(labelColorTestData).call(chart);
+                        .datum(finalData).call(chart);
             }
             timelineLabelColor();
         }
@@ -269,26 +290,26 @@ window.onload = function() {
     d3.csv("data/CallLogProbe.csv", function(error1, callLog) {
         d3.csv("data/SMSProbe.csv", function(error2, smsLog) {
             d3.csv("data/ScreenProbe.csv", function(error2, screenLog) {
-            	 d3.csv("data/LocationProbe.csv", function(error2, locationLog) {
-            	 	
-   
-                callLogData = callLog.sort(SortByName);
-                smsData = smsLog.sort(SortByName);
-                screenData = screenLog.sort(SortByName);
-                locationData = locationLog.sort(SortByName);
-           
-          
-                var day1 = $(".current-week-start").text();
-                var d1 = Date.parse(day1);
-                var newStartDate = dateFormat(d1, "yyyy-mm-dd hh:mm:ss");
-                var day2 = d1.next().day();
-                var newEndDate = dateFormat(d2, "yyyy-mm-dd hh:mm:ss");
-                drawGraph();
+                d3.csv("data/LocationProbe.csv", function(error2, locationLog) {
 
+
+                    callLogData = callLog.sort(SortByName);
+                    smsData = smsLog.sort(SortByName);
+                    screenData = screenLog.sort(SortByName);
+                    locationData = locationLog.sort(SortByName);
+
+
+                    var day1 = $(".current-week-start").text();
+                    var d1 = Date.parse(day1);
+                    var newStartDate = dateFormat(d1, "yyyy-mm-dd hh:mm:ss");
+                    var day2 = d1.next().day();
+                    var newEndDate = dateFormat(d2, "yyyy-mm-dd hh:mm:ss");
+                    drawGraph();
+
+                });
             });
         });
     });
- });
 
     /* This function will sort the data on timestamp
      * 

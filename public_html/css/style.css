@@ -143,17 +143,7 @@ body{
        position:absolute; 
        z-index:10;    	
     	}
-/*    #timeline2 .axis {
-      transform: translate(0px,30px);
-      -ms-transform: translate(0px,30px);  IE 9 
-      -webkit-transform: translate(0px,30px);  Safari and Chrome 
-      -o-transform: translate(0px,30px);  Opera 
-      -moz-transform: translate(0px,30px);  Firefox 
-    }*/
 
     .coloredDiv {
       height:20px; width:20px; float:left;
     }
-/*    #timelineItem_location{
-        display: none;
-    }*/

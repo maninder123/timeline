@@ -22,84 +22,76 @@ window.onload = function() {
      * @access 		public
      * @author 		Maninder Singh		<manindersingh221@gmail.com> 
      */
-     
-     var d1, d2;
-     
-     setWeek(null,null);
-     
-     $('.current-week-start').on('click', function() {
-         $('.date-pick').show();
-         $('.date-pick').position({
-             of: $(this),
-             my: "center bottom",
-             at: "center top"
-             });
-     });
-                
-     function syncDate() {
-         CURRENTDATE = $('.date-pick').datepicker( "getDate" );
-         setWeek(CURRENTDATE,CURRENTDATE);
-         drawGraph();
-     }
+
+    var d1, d2;
+
+    setWeek(null, null);
+
+    $('.current-week-start').on('click', function() {
+        $('.date-pick').show();
+        $('.date-pick').position({
+            of: $(this),
+            my: "center bottom",
+            at: "center top"
+        });
+    });
+
+    function syncDate() {
+        CURRENTDATE = $('.date-pick').datepicker("getDate");
+        setWeek(CURRENTDATE, CURRENTDATE);
+        drawGraph();
+    }
 
     $('.date-pick').hide();
-    $('.date-pick').datepicker( {
-                        onSelect: function(date) {
-                                syncDate();
-                                $('.date-pick').hide();
-                        },
-                        selectWeek: true,
-                        inline: true,
-                        firstDay: 1,
-                        dateFormat: "DD, d MM, yy"
-                });
-                
-                
-  function setWeek(from_day=null, to_day=null){
-	d1 = "";
-	d2 = "";
-	
-	
-	if(from_day==null && to_day==null){
-     d1 = Date.parse('today');
-     d2 = Date.parse('today');
-  }
-  
-  else{
-  	      
-       	d1 = from_day;
-         d2 = d1.clone();
-  	}            
-    if (d1.is().monday()) {
-        startDate = d1
-        endDate = d2.next().sunday();
-    }
-    else if (d1.is().sunday()) {
-        startDate = d1.last().monday();
-        endDate = d2;
-    }
-    else {
-    
-        startDate = d1.last().monday();
-        endDate = d2.next().sunday();
-    }
-    
-    
-    //append current date
-    //var Dates = new Date().getWeek();
-    $(".current-week-start").text(dateFormat(startDate, "dddd, mmmm dS, yyyy"));
-    $(".current-week-end").text(dateFormat(endDate, "dddd, mmmm dS, yyyy"));
-    //---------------------------------------------------------------------------
-    //appending week days
-    var day_zero = dateFormat(startDate, 'dddd, mmmm dS');
-    $('.day0').text(day_zero);
-    var i = 1;
-    for (i = 1; i < 7; i++) {
-        var week_days = startDate.next().day();
-        $('.day' + i).text(dateFormat(week_days, "dddd, mmmm dS,  yyyy"));
+    $('.date-pick').datepicker({
+        onSelect: function(date) {
+            syncDate();
+            $('.date-pick').hide();
+        },
+        selectWeek: true,
+        inline: true,
+        firstDay: 1,
+        dateFormat: "DD, d MM, yy"
+    });
 
+
+    function setWeek(from_day, to_day) {
+        if (from_day == null && to_day == null) {
+            d1 = Date.parse('today');
+            d2 = Date.parse('today');
+        }
+        else {
+            d1 = from_day;
+            d2 = d1.clone();
+        }
+        if (d1.is().monday()) {
+            startDate = d1
+            endDate = d2.next().sunday();
+        }
+        else if (d1.is().sunday()) {
+            startDate = d1.last().monday();
+            endDate = d2;
+        }
+        else {
+
+            startDate = d1.last().monday();
+            endDate = d2.next().sunday();
+        }
+
+        //append current date
+        $(".current-week-start").text(dateFormat(startDate, "dddd, mmmm dS, yyyy"));
+        $(".current-week-end").text(dateFormat(endDate, "dddd, mmmm dS, yyyy"));
+        //---------------------------------------------------------------------------
+        //appending week days
+        var day_zero = dateFormat(startDate, 'dddd, mmmm dS');
+        $('.day0').text(day_zero);
+        var i = 1;
+        for (i = 1; i < 7; i++) {
+            var week_days = startDate.next().day();
+            $('.day' + i).text(dateFormat(week_days, "dddd, mmmm dS,  yyyy"));
+
+        }
     }
- }
     /*
      * Left arrow click event, click ing on this arrow will take us a week back
      * 
@@ -374,4 +366,4 @@ window.onload = function() {
             return 0;
         return a1 > b1 ? 1 : -1;
     }
-}
+};

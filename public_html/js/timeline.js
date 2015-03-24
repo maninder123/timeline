@@ -83,7 +83,7 @@ window.onload = function() {
         $(".current-week-end").text(dateFormat(endDate, "dddd, mmmm dS, yyyy"));
         //---------------------------------------------------------------------------
         //appending week days
-        var day_zero = dateFormat(startDate, 'dddd, mmmm dS');
+        var day_zero = dateFormat(startDate, 'dddd, mmmm dS, yyyy');
         $('.day0').text(day_zero);
         var i = 1;
         for (i = 1; i < 7; i++) {
@@ -119,12 +119,12 @@ window.onload = function() {
 
         $(".current-week-end").text(dateFormat(newEndDate, "dddd, mmmm dS, yyyy"));
         //appending week days
-        var day_zero_new = dateFormat(newStartDate, "dddd, mmmm dS");
+        var day_zero_new = dateFormat(newStartDate, "dddd, mmmm dS, yyyy");
         $('.day0').text(day_zero_new);
         var i = 1;
         for (i = 1; i < 7; i++) {
             var week_days_new = newStartDate.next().day();
-            $('.day' + i).text(dateFormat(week_days_new, "dddd, mmmm dS"));
+            $('.day' + i).text(dateFormat(week_days_new, "dddd, mmmm dS, yyyy"));
         }
 
         drawGraph(); // calling draw fucntion to plot
@@ -148,7 +148,7 @@ window.onload = function() {
         $(".current-week-start").text(dateFormat(newStartDate, "dddd, mmmm dS, yyyy"));
         $(".current-week-end").text(dateFormat(newEndDate, "dddd, mmmm dS, yyyy"));
         //appending week days
-        var day_zero_new1 = dateFormat(newStartDate, "dddd, mmmm dS");
+        var day_zero_new1 = dateFormat(newStartDate, "dddd, mmmm dS, yyyy");
         $('.day0').text(day_zero_new1);
         var i = 1;
         for (i = 1; i < 7; i++) {
